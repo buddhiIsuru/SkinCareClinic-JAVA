@@ -11,6 +11,8 @@ public class Appointment {
     private Dermatologist dermatologist;
     private Treatment treatment;
     private final double registrationFee = 500;
+    private double taxAmount = 0.0;
+    private double subAmount = 0;
     private double finalAmount = 0;
 
     public Appointment(String date, String time, Patient patient, Dermatologist dermatologist) {
@@ -30,11 +32,21 @@ public class Appointment {
     public Treatment getTreatment() { return treatment; }
     public double getFinalAmount() { return finalAmount; }
 
+    public double getSubAmount() {
+        return subAmount;
+    }
+
+    public void setSubAmount(double subAmount) {
+        this.subAmount = subAmount;
+    }
+
     public void addTreatment(Treatment treatment) {
+        double tax = 0.025;
         this.treatment = treatment;
         double treatmentFee = treatment.getPrice();
-        double tax = treatmentFee * 0.025;
-        this.finalAmount = Math.ceil(treatmentFee + tax + registrationFee);
+        this.subAmount = Math.ceil(treatmentFee+registrationFee);
+        this.taxAmount = Math.ceil(subAmount * tax);
+        this.finalAmount = Math.ceil(subAmount + taxAmount);
     }
 
     public double getRegistrationFee() {
@@ -43,6 +55,14 @@ public class Appointment {
 
     public boolean hasTreatment() {
         return treatment != null;
+    }
+
+    public double getTaxAmount() {
+        return taxAmount;
+    }
+
+    public void setTaxAmount(double taxAmount) {
+        this.taxAmount = taxAmount;
     }
 
     public static int getIdCounter() { return idCounter; }
